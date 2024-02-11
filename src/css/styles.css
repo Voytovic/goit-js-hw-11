@@ -64,21 +64,27 @@ ul {
 }
 
 .gal-item {
+  position: relative;
   border: 1px solid #808080;
   transition: transform 250ms ease-in-out;
+  overflow: hidden;
 }
 
 .par-sect {
+  position: absolute;
+  bottom: -48px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 30px;
+  background-color: #ffffff;
 }
 
 .par-sect p {
   text-align: center;
   margin-top: 4px;
-  margin-bottom: 4px;
+  margin-bottom: 52px;
   font-weight: 400;
   font-size: 12px;
   line-height: 1.5;
