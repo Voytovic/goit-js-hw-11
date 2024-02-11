@@ -4,6 +4,7 @@ body {
 
 ul {
   list-style: none;
+  padding-inline-start: 0;
 }
 
 .form {
@@ -38,7 +39,7 @@ ul {
 
 .button {
   border-radius: 8px;
-  width: 75px;
+  width: 91px;
   height: 40px;
   border: none;
   background-color: #4e75ff;
