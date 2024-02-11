@@ -1,76 +1,48 @@
-
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-const inputRef = document.querySelector('#searchInput');
-const btnRef = document.querySelector('button[type="submit"]');
-const formRef = document.querySelector('.js-form');
-const galleryRef = document.querySelector('.gallery');
-const loaderRef = document.querySelector('.loader');
-let lightbox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-});
+import { getPhotosByRequest } from './js/pixabay-api';
+import { renderPhotos } from './js/render-function';
+import { refs } from './js/render-function';
 
-btnRef.addEventListener('click', onButtonSubmit);
+refs.loader.style.display = 'none';
 
-function onButtonSubmit(e) {
+refs.form.addEventListener('submit', onFormSubmit);
+
+function onFormSubmit(e) {
   e.preventDefault();
-  const value = inputRef.value.trim();
-  if (!value) return;
-  loaderRef.classList.add('is-shown');
-  formRef.reset();
-  getPhotos(value)
-    .then(photos => {
-      if (!photos.hits.length) {
+  if (refs.input.value.trim() === '' || refs.input.value.trim().length === 0) {
+    return;
+  }
+  refs.gallery.innerHTML = '';
+  refs.loader.style.display = 'block';
+
+  const userRequest = e.target.elements.search.value;
+  getPhotosByRequest(userRequest)
+    .then(data => {
+      if (data.hits.length === 0) {
+        clearGallery();
         iziToast.error({
-          title: 'Sorry',
           message:
-            'There are no images matching your search query. Please try again!',
+            'Sorry, there are no images matching your search query. Please try again!',
           position: 'topRight',
+          transitionIn: 'fadeInLeft',
         });
       } else {
-        loaderRef.classList.remove('is-shown');
-        renderPhotos(photos.hits);
+        renderPhotos(data.hits);
       }
     })
-    .catch(error => {
-      console.error('Помилка:', error);
+    .catch(err => {
+      alert(err);
+    })
+    .finally(() => {
+      refs.loader.style.display = 'none';
     });
+
+  e.target.reset();
 }
 
-function getPhotos(data) {
-  const url = `https://pixabay.com/api/?key=42305362-292fb567d2617ee346426e642&q=${data}&image_type=photo?orientation=horizontal?safesearch=true`;
-
-  return fetch(url).then(res => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      throw new Error(`Помилка: ${res.status}`);
-    }
-  });
-}
-
-function photoTemplate(photo) {
-  return `
-  <li class="gallery-item">
-    <a href="${photo.largeImageURL}">
-    <img src="${photo.webformatURL}" alt="${photo.tags}">
-    <div class="card-body">
-      <p class="card-text">Likes: ${photo.likes}</p>
-      <p class="card-text">Views: ${photo.views}</p>
-      <p class="card-text">Comments: ${photo.comments}</p>
-      <p class="card-text">Downloads: ${photo.downloads}</p>
-    </div>
-    </a>
-  </li>`;
-}
-
-function renderPhotos(photos) {
-  galleryRef.innerHTML = '';
-  const markup = photos.map(photo => photoTemplate(photo)).join('');
-  galleryRef.innerHTML = markup;
-  lightbox.refresh();
+function clearGallery() {
+  refs.gallery.innerHTML = '';
 }

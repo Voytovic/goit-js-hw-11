@@ -3,22 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Search images</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <link rel="stylesheet" href="./css/styles.css" />
+    <title>Document</title>
   </head>
   <body>
-    <form class="js-form">
-      <input
-        type="text"
-        id="searchInput"
-        name="searchInput"
-        placeholder="Search images..."
-      />
-      <button type="submit">Search</button>
-    </form>
-    <span class="loader"></span>
-    <div class="gallery"></div>
+    <div class="container">
+      <form class="form">
+        <label>
+          <input
+            type="search"
+            name="search"
+            class="input-search"
+            placeholder="Search images..."
+          />
+        </label>
 
-    <script type="module" src="./main.js"></script>
+        <button type="submit" class="button">Search</button>
+      </form>
+
+      <ul class="gallery"></ul>
+
+      <span class="loader"></span>
+    </div>
+
+    <script src="./main.js" type="module"></script>
   </body>
 </html>
