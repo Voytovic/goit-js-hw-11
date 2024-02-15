@@ -9,3 +9,4 @@ export function getPhotosByRequest(userRequest) {
 
   return fetch(url).then(res => res.json());
 }
+

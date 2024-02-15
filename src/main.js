@@ -15,7 +15,7 @@ function onFormSubmit(e) {
   if (refs.input.value.trim() === '' || refs.input.value.trim().length === 0) {
     return;
   }
-  refs.gallery.innerHTML = '';
+  clearGallery();
   refs.loader.style.display = 'block';
 
   const userRequest = e.target.elements.search.value;
@@ -26,15 +26,16 @@ function onFormSubmit(e) {
         iziToast.error({
           message:
             'Sorry, there are no images matching your search query. Please try again!',
-          position: 'topRight',
-          transitionIn: 'fadeInLeft',
+          position: 'topCenter',
         });
       } else {
         renderPhotos(data.hits);
       }
     })
     .catch(err => {
-      alert(err);
+      iziToast.error({
+    message: `Error: ${err.message}`,
+  });
     })
     .finally(() => {
       refs.loader.style.display = 'none';
